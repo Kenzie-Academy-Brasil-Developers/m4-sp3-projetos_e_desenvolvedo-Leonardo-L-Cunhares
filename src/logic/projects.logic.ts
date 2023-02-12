@@ -92,10 +92,14 @@ const listProjectsPerId = async (req:Request, res:Response):Promise<Response> =>
       FULL OUTER JOIN 
         technologies t 
       ON pt."technologyId" = t.id
-      WHERE p.id = 1;
+      WHERE p.id = $1;
     `
+    const queryConfig:QueryConfig = {
+      text:queryString,
+      values:[id]
+    }
 
-    const QueryResult:ProjectTechnologiesResult = await client.query(queryString)
+    const QueryResult:ProjectTechnologiesResult = await client.query(queryConfig)
   
     return res.status(200).json(QueryResult.rows)
 }
