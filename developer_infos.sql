@@ -57,4 +57,18 @@ add column "developerInfoId" INTEGER unique;
 alter table	
 	developers 
 add foreign key ("developerInfoId") references developer_infos(id);	
-	
+
+SELECT 
+	pr.*,
+    pt."technologyId" ,
+    t."name" 
+FROM 
+    projects pr
+LEFT JOIN
+	projects_technologies pt 
+ON 
+    pt."projectId" = pr.id
+LEFT JOIN 
+    technologies t 
+ON 
+t.id  = pt."technologyId";	

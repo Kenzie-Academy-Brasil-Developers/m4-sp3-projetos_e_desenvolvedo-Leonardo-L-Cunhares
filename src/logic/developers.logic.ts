@@ -3,20 +3,7 @@ import format from 'pg-format';
 import {  DevelopersInfosResult, DevelopersResult, IDevelopers, IDevelopersInfos, IDevelopersRequest,  RequeridKeys, RequeridKeysInfos } from '../interface/developers.interface';
 import {client} from '../database'
 import { QueryConfig } from 'pg';
-const verifyListOrder = (payload: any): IDevelopersRequest => {
-    const keys: Array<string> = Object.keys(payload);
-    const requiredKeys: Array<RequeridKeys> = ['name', 'email'];
-  
-    const containsAllRequired: boolean = requiredKeys.every((key: string) => {
-      return keys.includes(key);
-    });
-  
-    if (!containsAllRequired) {
-      throw new Error(`Required Keys are: ${requiredKeys}`);
-    }
-  
-    return payload;
-  };
+
 const createDeveloper = async (req:Request, res:Response) :Promise<Response> => {
 
     const keys: Array<string> = Object.keys(req.body);
@@ -92,7 +79,7 @@ const listUniqueDeveloper = async (req:Request , res:Response):Promise<Response>
             di."preferredOS" 
         FROM 
             developers de 
-        FULL OUTER JOIN
+        LEFT JOIN
             developer_infos di  
         ON 
             de."developerInfoId"= di.id
@@ -176,8 +163,8 @@ const updateDevelopers = async (req:Request, res:Response):Promise<Response> => 
 
     if (!req.body.name && !req.body.email) {
       return res.status(400).json({
-        message: "At least one of those keys must be send.",
-        keys:[ "name", "email" ]
+        message: 'At least one of those keys must be send.',
+        keys:[ 'name', 'email' ]
       })
     }
     if(req.body.developerInfoId){
@@ -187,26 +174,11 @@ const updateDevelopers = async (req:Request, res:Response):Promise<Response> => 
     }
 
     const { name, email } = req.body;
-    let correctData = {}
+    let correctData:Partial<IDevelopersRequest> = {}
     
-    if(name){
-        correctData = {
-            name
-        }
-    }
-    if(email){
-        correctData = {
-            email
-        }
-    }
-    if(name && email){
-        correctData = {
-            name,
-            email
-        }
-    }
+    if(name){correctData.name = name}
+    if(email){correctData.email = email}
     
-
     const queryString:string = format(`
         UPDATE
             developers
@@ -245,25 +217,10 @@ const upadateDevelopersInfos = async (req: Request, res:Response):Promise<Respon
         }
     }
     
-    let correctData = {}
+    let correctData:Partial<IDevelopersInfos> = {}
     
-    if(developerSince){
-        correctData = {
-            developerSince
-        }
-    }
-    if(preferredOS){
-        correctData = {
-            preferredOS
-        }
-    }
-    if(developerSince && preferredOS){
-        correctData = {
-            developerSince,
-            preferredOS
-        }
-    }
-   
+    if(developerSince){correctData.developerSince = developerSince}
+    if(preferredOS){correctData.preferredOS = preferredOS}
     
     const queryString:string = format(`
         UPDATE
