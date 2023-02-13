@@ -16,7 +16,7 @@ const varifyEmail = async (req:Request, res:Response, next:NextFunction):Promise
     const verifyEmail = queryResult.rows.find(element => element.email == email)
     
     if(verifyEmail){
-       return  res.status(400).json({
+       return  res.status(409).json({
             message: 'Email already exists.'
         })
     }

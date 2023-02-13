@@ -140,7 +140,7 @@ const deleteTechFromProject = async (req:Request , res:Response):Promise<Respons
         values: [queryResult.rows[0].id ,id]
     }
     queryResult = await client.query(queryConfig)
-    console.log(id)
+    
     if(queryResult.rowCount != 1){
         return res.status(404).json({
             message:`Technology ${name} not found on this Project.`
