@@ -55,6 +55,8 @@ alter table
 	developers 
 add foreign key ("developerInfoId") references developer_infos(id);	
 
+ALTER TABLE developer_infos  
+RENAME COLUMN current_ TO "preferredOS";
 
 INSERT INTO
     developers(%I)
