@@ -71,4 +71,38 @@ ON
 LEFT JOIN 
     technologies t 
 ON 
-t.id  = pt."technologyId";	
+t.id  = pt."technologyId";
+
+
+
+SELECT 
+	d.id  AS "developerID",
+    d."name" AS "developerName",
+    d.email AS "developerEmail",
+    di.id  AS "developerInfoID",
+    di."developerSince" AS "developerInfoDeveloperSince",
+    di."preferredOS" AS "developerInfoPreferredOS",
+    p.id AS "projectID",
+    p."name" AS "projectName",
+    p.description AS "projectDescription",
+    p."estimatedTime" AS "projectEstimatedTime",
+    p.repository AS "projectRepository",
+    p."startDate" AS "projectStartDate",
+    p."endDate" AS "projectEndDate",
+    t.id AS "technologyId",
+    t."name" AS "technologyName"
+FROM 	
+	projects p 
+FULL OUTER JOIN
+	developers d
+ON p."developerId" = d.id 
+FULL OUTER JOIN 
+	developer_infos di 
+ON d."developerInfoId" = di.id 
+FULL OUTER JOIN 
+	projects_technologies pt 
+ON pt."projectId" = p.id 
+FULL OUTER JOIN 
+	technologies t 
+ON pt."technologyId" = t.id 
+WHERE d.id = $1;

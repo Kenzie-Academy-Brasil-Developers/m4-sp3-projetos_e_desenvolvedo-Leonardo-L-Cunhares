@@ -37,7 +37,7 @@ const listAllDeveloperProjects = async(req:Request , res: Response):Promise<Resp
         FULL OUTER JOIN 
 	        technologies t 
         ON pt."technologyId" = t.id 
-        WHERE p."developerId" = $1;
+        WHERE d.id = $1;
     `
     const queryConfig:QueryConfig = {
         text:queryString,
@@ -45,6 +45,8 @@ const listAllDeveloperProjects = async(req:Request , res: Response):Promise<Resp
     }
 
     const queryResult:DeveloperAllProjectsResult = await client.query(queryConfig)
+
+ 
 
     return res.status(200).json(queryResult.rows)
 }

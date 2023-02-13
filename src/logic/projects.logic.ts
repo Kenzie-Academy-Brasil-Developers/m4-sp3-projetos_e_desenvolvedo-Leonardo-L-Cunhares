@@ -49,9 +49,16 @@ const createProjects = async (req: Request, res: Response):Promise<Response> =>{
 const listProjects = async (req:Request, res: Response):Promise<Response> => {
     const queryString:string = `
       SELECT 
-        pr.*,
-        pt."technologyId" ,
-        t."name" technologyName
+        pr.id as "projectID",
+        pr."name" as "projectName",
+        pr.description as "projectDescription",
+        pr."estimatedTime" as "projectEstimatedTime",
+        pr.repository as "projectRepository",
+        pr."startDate"  as "projectStartDate",
+        pr."endDate" as "projectEndDate",
+        pr."developerId" as "projectDeveloperID",
+        t.id as "technologyId",
+        t.name as "technologyName"
       FROM 
         projects pr
       LEFT JOIN
@@ -62,7 +69,7 @@ const listProjects = async (req:Request, res: Response):Promise<Response> => {
         technologies t 
       ON 
         t.id  = pt."technologyId"
-      ORDER BY id;	
+      ORDER BY pr.id;	
       `
      
       const QueryResult:ProjectTechnologiesResult = await client.query(queryString)

@@ -48,12 +48,12 @@ const createDeveloper = async (req:Request, res:Response) :Promise<Response> => 
 const listDevelopers = async (req:Request, res:Response):Promise<Response> => {
     let queryString:string = `
         SELECT 	
-            de.id,
-            de."name",
-            de.email,
-            de."developerInfoId",
-            di."developerSince",
-            di."preferredOS" 
+            de.id AS "developerID",
+            de."name" AS "developerName",
+            de.email AS "developerEmail",
+            de."developerInfoId" ,
+            di."developerSince" AS "developerInfoDeveloperSince",
+            di."preferredOS" AS "developerInfoPreferredOS" 
         FROM 
             developers de
         FULL OUTER JOIN 
@@ -71,12 +71,12 @@ const listUniqueDeveloper = async (req:Request , res:Response):Promise<Response>
 
     const queryString:string = `
         SELECT 	
-            de.id,
-            de.name,
-            de.email,
-            de."developerInfoId",
-            di."developerSince",
-            di."preferredOS" 
+            de.id AS "developerID",
+            de."name" AS "developerName",
+            de.email AS "developerEmail",
+            de."developerInfoId" ,
+            di."developerSince" AS "developerInfoDeveloperSince",
+            di."preferredOS" AS "developerInfoPreferredOS" 
         FROM 
             developers de 
         LEFT JOIN
