@@ -52,7 +52,7 @@ const verifyNameParams = async (req: Request, res:Response, next:NextFunction):P
         values:[name]
     }
     const queryResult = await client.query(queryConfig)
-    console.log(queryResult.rows[0].count)
+ 
    
     if(queryResult.rows[0].count == 1){
         return next()

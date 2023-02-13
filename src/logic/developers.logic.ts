@@ -7,7 +7,7 @@ import { QueryConfig } from 'pg';
 const createDeveloper = async (req:Request, res:Response) :Promise<Response> => {
 
     const keys: Array<string> = Object.keys(req.body);
-    const requiredKeys: Array<RequeridKeys> = ['name', 'email'];
+    const requiredKeys: Array<RequeridKeys> = ['name', 'email'] ;
 
     const containsAllRequired: boolean = requiredKeys.every((key: string) => {
       return keys.includes(key);
@@ -262,7 +262,7 @@ const deleteDeveloper = async (req:Request, res:Response):Promise<Response> => {
         queryString = `
             DELETE FROM
                 developers
-            WHERE id = $1    
+            WHERE id = $1;    
         `
         queryConfig = {
             text:queryString,
