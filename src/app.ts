@@ -4,8 +4,8 @@ import {createDeveloper, createDeveloperInfos, deleteDeveloper, listDevelopers, 
 import { ensureDeveloperExists, varifyEmail } from './middlewares/developers.middleware'
 import { ensureDeveloperProject, ensureProjectsExists } from './middlewares/projects.middlewate'
 import { createProjects, deleteProject, listProjects, listProjectsPerId, updateProjects } from './logic/projects.logic'
-import { addTechOnProject, listAllDeveloperProjects } from './logic/developersProjects.logic'
-import {verifyNameTechnologies} from './middlewares/technologies.middleware'
+import { addTechOnProject, deleteTechFromProject, listAllDeveloperProjects } from './logic/developersProjects.logic'
+import {verifyNameParams, verifyNameTechnologies} from './middlewares/technologies.middleware'
 
 
 const app:Application = express()
@@ -27,6 +27,7 @@ app.delete('/projects/:id',ensureProjectsExists,deleteProject)
 
 app.get('/developers/:id/projects',ensureDeveloperExists,listAllDeveloperProjects)
 app.post('/projects/:id/technologies',ensureProjectsExists,verifyNameTechnologies,addTechOnProject)
+app.delete('/projects/:id/technologies/:name',ensureProjectsExists,verifyNameParams,deleteTechFromProject)
 
 
 app.listen(3000, async ()=> {

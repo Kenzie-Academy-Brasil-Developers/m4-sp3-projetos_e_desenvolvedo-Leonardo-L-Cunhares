@@ -111,4 +111,42 @@ const addTechOnProject = async (req:Request, res:Response):Promise<Response> =>{
     const lastIndex = queryResultComplete.rows.at(-1)
     return res.status(201).json(lastIndex)
 }
-export {listAllDeveloperProjects,addTechOnProject}
+const deleteTechFromProject = async (req:Request , res:Response):Promise<Response> => {
+    const {id , name} = req.params
+
+    let queryString:string = `
+    SELECT 
+	*
+    FROM 	
+	    technologies 
+    WHERE name = $1;
+    `
+    let queryConfig:QueryConfig = {
+        text:queryString,
+        values: [name]
+    }
+
+    let queryResult = await client.query(queryConfig)
+    
+    queryString = `
+        DELETE FROM
+            projects_technologies
+        WHERE
+            "technologyId" = $1 AND "projectId" = $2
+        RETURNING*;    
+    `
+    queryConfig = {
+        text:queryString,
+        values: [queryResult.rows[0].id ,id]
+    }
+    queryResult = await client.query(queryConfig)
+    console.log(id)
+    if(queryResult.rowCount != 1){
+        return res.status(404).json({
+            message:`Technology ${name} not found on this Project.`
+        })
+    }
+
+    return res.status(204).send()
+}
+export {listAllDeveloperProjects,addTechOnProject,deleteTechFromProject}
