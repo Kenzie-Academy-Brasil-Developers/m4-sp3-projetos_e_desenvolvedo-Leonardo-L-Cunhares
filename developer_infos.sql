@@ -1,16 +1,20 @@
 create database developer;
 
 create type "preferredOS" as enum ('Windows','Linux','MacOS');
+
 create table developer_infos(
-	id SERIAL primary key,
-	"developerSince" DATE not null,
-	current_"preferredOS"  not NULL
+	"id" SERIAL primary key,
+	"developerSince" DATE NOT NOT,
+	"preferredOS"  NOT NULL
 );
 
 create table developers (
-	id SERIAL primary key,
-	name VARCHAR(50) not null,
-	email VARCHAR(50) not null
+	"id" SERIAL primary key,
+	"name" VARCHAR(50) not null,
+	"email" VARCHAR(50) not null,
+    "developerInfoId" INTEGER unique,
+    add foreign key ("developerInfoId") references developer_infos(id) on delete cascade	
+
 );
 
 create table projects(
@@ -20,7 +24,9 @@ create table projects(
 	"estimatedTime" VARCHAR(50) not null,
 	"repository" VARCHAR(120) not null,
 	"startDate" DATE not null,
-	"endDate" DATE
+	"endDate" DATE,
+    "developerId" INTEGER NOT NULL,
+    add foreign key ("developerId") references developerss(id)
 );
 
 create table technologies (
@@ -45,23 +51,14 @@ VALUES
 
 create table projects_technologies(
 	"id" SERIAL primary key,
-	"addedIn" DATE not NULL
+	"addedIn" DATE not NULL,
+    "projectId" INTEGER NOT NULL,
+    add foreign key ("projectId") references projects(id),
+    "technologyId" INTEGER not null,
+    add foreign key ("technologyId") references technologies(id)
 );
 
-ALTER TABLE  
-	developers
-add column "developerInfoId" INTEGER unique;
 
-ALTER TABLE 	
-	developers 
-add foreign key ("developerInfoId") references developer_infos(id);	
 
-ALTER TABLE developer_infos  
-RENAME COLUMN current_ TO "preferredOS";
 
-ALTER TABLE  
-	projects_technologies  
-add column "technologyId" INTEGER not null;
-ALTER TABLE 
-	projects_technologies  
-add foreign key ("technologyId") references technologies(id);	
+
