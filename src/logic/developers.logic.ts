@@ -97,9 +97,29 @@ const listUniqueDeveloper = async (req:Request , res:Response):Promise<Response>
 }
 
 const createDeveloperInfos = async (req:Request, res: Response):Promise<Response> => {
-    const keys: Array<string> = Object.keys(req.body);
+    const keys: Array<string> = Object.keys(req.body)
     const id:number = parseInt(req.params.id)
-    const requiredKeys: Array<RequeridKeysInfos> = ['developerSince', 'preferredOS'];
+    const requiredKeys: Array<RequeridKeysInfos> = ['developerSince', 'preferredOS']
+
+    const queryStringDeveloper: string = `
+        SELECT
+            *
+        FROM 
+            developers
+        WHERE id = $1    
+    `
+    const queryConfigDeveloper:QueryConfig = {
+        text:queryStringDeveloper,
+        values:[id]
+    }
+
+    const queryResultDeveloper = await client.query(queryConfigDeveloper) 
+
+    if(queryResultDeveloper.rows[0].developerInfoId != null){
+        return res.status(400).json({
+            message: 'Developer already register Infos'
+        })
+    }
   
     const containsAllRequired: boolean = requiredKeys.every((key: string) => {
       return keys.includes(key);
