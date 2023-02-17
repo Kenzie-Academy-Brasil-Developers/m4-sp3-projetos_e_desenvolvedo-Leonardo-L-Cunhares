@@ -48,14 +48,20 @@ create table projects_technologies(
 	"addedIn" DATE not NULL
 );
 
-alter table 
+ALTER TABLE  
 	developers
 add column "developerInfoId" INTEGER unique;
 
-alter table	
+ALTER TABLE 	
 	developers 
 add foreign key ("developerInfoId") references developer_infos(id);	
 
 ALTER TABLE developer_infos  
 RENAME COLUMN current_ TO "preferredOS";
 
+ALTER TABLE  
+	projects_technologies  
+add column "technologyId" INTEGER not null;
+ALTER TABLE 
+	projects_technologies  
+add foreign key ("technologyId") references technologies(id);	
